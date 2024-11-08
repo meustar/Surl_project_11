@@ -2,6 +2,10 @@ package com.koreait.surl_project_11.global.initData;
 
 import com.koreait.surl_project_11.domain.article.article.entity.Article;
 import com.koreait.surl_project_11.domain.article.article.service.ArticleService;
+import com.koreait.surl_project_11.domain.member.member.entity.Member;
+import com.koreait.surl_project_11.domain.member.member.service.MemberService;
+import com.koreait.surl_project_11.global.exceptions.GlobalException;
+import com.koreait.surl_project_11.global.rsData.RsData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationRunner;
@@ -29,6 +33,7 @@ public class NotProd {
                             // self를 통한 메서드 호출은 @Transactional을 작동 시킬 수 있다.
 
     private final ArticleService articleService;
+    private final MemberService memberService;
 
     @Bean   // 개발자가 new 하지 않아도스프링부트가 직접 관리하는 객체
     public ApplicationRunner initNotProd() {
@@ -44,6 +49,17 @@ public class NotProd {
 
         // 읽기 전용 트렌잭션.
         if (articleService.count() > 0 ) return;   // 테이블에 데이터가 이미 존재한다면 종료.
+
+        Member member1 = memberService.join("user1", "1234", "유저 1").getData();
+        Member member2 = memberService.join("user2", "1234", "유저 2").getData();
+
+        try {
+            RsData<Member> joinRs = memberService.join("user2", "1234", "유저 2");
+        } catch (GlobalException e) {
+            System.out.println("e.getMsg() : " + e.getRsData().getMsg());
+            System.out.println("e.getStatusCode() : " + e.getRsData().getStatusCode());
+        }
+
 
         // 쓰기 전용 트렌젝션
         Article article1 = articleService.write("제목 1", "내용 1").getData();

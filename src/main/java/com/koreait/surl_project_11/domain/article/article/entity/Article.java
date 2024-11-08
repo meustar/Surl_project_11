@@ -1,13 +1,22 @@
-package com.koreait.surl_project_11;
+package com.koreait.surl_project_11.domain.article.article.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
+
 @Entity // 이 클래스로 테이블 만들것이다.
+@Builder
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Article {
 
     @Id // 이 필드를 primary Key로 만들것이다.

@@ -1,31 +1,18 @@
 package com.koreait.surl_project_11.domain.member.member.entity;
 
-import jakarta.persistence.*;
+import com.koreait.surl_project_11.global.jpa.entity.BaseTime;
+import jakarta.persistence.Entity;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDateTime;
-
-import static jakarta.persistence.GenerationType.IDENTITY;
+import static lombok.AccessLevel.PROTECTED;
 
 @Entity
 @Builder
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
-@EntityListeners(AuditingEntityListener.class)
-public class Member {
-    @Id
-    @GeneratedValue(strategy = IDENTITY)    // Auto_increment
-    private Long id;
-    @CreatedDate
-    private LocalDateTime createDate;
-    @LastModifiedDate
-    private LocalDateTime ModifyDate;
-    @Column(unique = true)  // 만들때 부터 설정을 넣어두는 기본값. unique.
+@AllArgsConstructor(access = PROTECTED)
+@NoArgsConstructor(access = PROTECTED)
+public class Member extends BaseTime {
     private String username;
     private String password;
     private String nickname;

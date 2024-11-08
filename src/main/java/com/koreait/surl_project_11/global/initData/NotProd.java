@@ -47,12 +47,12 @@ public class NotProd {
 
         // articleRepository.deleteAll();  // 테이블의 데이터 삭제.
 
-        Article article1 = Article.builder().
-                title("제목1")
+        Article article1 = Article.builder()
+                .title("제목1")
                 .body("내용1").build();
 
-        Article article2 = Article.builder().
-                title("제목2")
+        Article article2 = Article.builder()
+                .title("제목2")
                 .body("내용2").build();
 
         // 쓰기 전용 트렌젝션

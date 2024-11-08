@@ -4,8 +4,6 @@ import com.koreait.surl_project_11.domain.article.article.entity.Article;
 import com.koreait.surl_project_11.domain.article.article.service.ArticleService;
 import com.koreait.surl_project_11.domain.member.member.entity.Member;
 import com.koreait.surl_project_11.domain.member.member.service.MemberService;
-import com.koreait.surl_project_11.global.exceptions.GlobalException;
-import com.koreait.surl_project_11.global.rsData.RsData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationRunner;
@@ -52,14 +50,6 @@ public class NotProd {
 
         Member member1 = memberService.join("user1", "1234", "유저 1").getData();
         Member member2 = memberService.join("user2", "1234", "유저 2").getData();
-
-        try {
-            RsData<Member> joinRs = memberService.join("user2", "1234", "유저 2");
-        } catch (GlobalException e) {
-            System.out.println("e.getMsg() : " + e.getRsData().getMsg());
-            System.out.println("e.getStatusCode() : " + e.getRsData().getStatusCode());
-        }
-
 
         // 쓰기 전용 트렌젝션
         Article article1 = articleService.write("제목 1", "내용 1").getData();

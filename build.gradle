@@ -33,6 +33,9 @@ dependencies {
     runtimeOnly 'com.mysql:mysql-connector-j'
     runtimeOnly 'org.postgresql:postgresql'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    // H2
+    implementation 'com.h2database:h2'
 }
 
 tasks.named('test') {

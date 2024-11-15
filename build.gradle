@@ -36,6 +36,13 @@ dependencies {
 
     // H2
     implementation 'com.h2database:h2'
+
+    // API를 통한 스프링부트의 상태 모니터링. 컨테이너 교체시기 확인가능.
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+    // 로그인중인 유저들의 정보를 session에 저장하여 계속이용가능한 상태를 만듦.
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'org.springframework.session:spring-session-data-redis'
 }
 
 tasks.named('test') {

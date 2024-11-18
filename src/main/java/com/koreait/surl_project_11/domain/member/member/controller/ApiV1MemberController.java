@@ -2,9 +2,9 @@ package com.koreait.surl_project_11.domain.member.member.controller;
 
 import com.koreait.surl_project_11.domain.member.member.entity.Member;
 import com.koreait.surl_project_11.domain.member.member.service.MemberService;
-import com.koreait.surl_project_11.global.exceptions.GlobalException;
 import com.koreait.surl_project_11.global.rsData.RsData;
-import com.koreait.surl_project_11.standard.util.Ut;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -22,8 +22,11 @@ public class ApiV1MemberController {
     @AllArgsConstructor
     @Getter
     public static class MemberJoinReqBody{
+        @NotBlank(message = "username 입력하세요.")   // (공백금지)
         private String username;
+        @NotBlank(message = "password 입력하세요.")
         private String password;
+        @NotBlank(message = "nickname 입력하세요.")
         private String nickname;
     }
 
@@ -31,17 +34,8 @@ public class ApiV1MemberController {
     @PostMapping("")   // "/join" 생략 가능하다. why? POST 때문에.
     public RsData<Member> join(
 //            String username, String password, String nickname
-            @RequestBody MemberJoinReqBody requestBody
+            @RequestBody @Valid MemberJoinReqBody requestBody
     ) {
-        if (Ut.str.isBlank(requestBody.username)) {
-            throw new GlobalException("400-1", "username을 입력해");
-        }
-        if (Ut.str.isBlank(requestBody.password)) {
-            throw new GlobalException("400-2", "password을 입력해");
-        }
-        if (Ut.str.isBlank(requestBody.nickname)) {
-            throw new GlobalException("400-3", "nickname을 입력해");
-        }
 
         return memberService.join(requestBody.username, requestBody.password, requestBody.nickname);
 

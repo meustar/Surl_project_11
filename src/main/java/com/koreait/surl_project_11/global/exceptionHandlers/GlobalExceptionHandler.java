@@ -1,8 +1,11 @@
 package com.koreait.surl_project_11.global.exceptionHandlers;
 
 import com.koreait.surl_project_11.global.exceptions.GlobalException;
+import com.koreait.surl_project_11.global.rsData.RsData;
+import com.koreait.surl_project_11.standard.dto.Empty;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -12,20 +15,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Slf4j
 public class GlobalExceptionHandler {
 
-    // 더 광범위. 외적인 상황
-    @ExceptionHandler(Exception.class)
-    @ResponseBody
-    public String handleException(Exception ex) {
-        log.debug("handleException 1");
-        return ex.getMessage();
-    }
-
     // Global 이지만. 한정적인 상황
     @ExceptionHandler(GlobalException.class)
+//    @ResponseStatus(HttpStatus.BAD_REQUEST)   // 400으로 고정.
     @ResponseBody
-    public String handleException(GlobalException ex) {
-        log.debug("handleException 2");
-        return ex.getMessage();
+    public ResponseEntity<String> handleException(GlobalException ex) {
+        RsData<Empty> rsData = ex.getRsData();
+
+        rsData.getStatusCode();
+
+        return ResponseEntity.status(rsData.getStatusCode()).body(rsData.getMsg());
     }
 
 }

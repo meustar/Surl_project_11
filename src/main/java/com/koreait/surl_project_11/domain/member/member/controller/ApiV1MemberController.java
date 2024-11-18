@@ -22,11 +22,11 @@ public class ApiV1MemberController {
     @AllArgsConstructor
     @Getter
     public static class MemberJoinReqBody{
-        @NotBlank(message = "username 입력하세요.")   // (공백금지)
+        @NotBlank   // (공백금지)
         private String username;
-        @NotBlank(message = "password 입력하세요.")
+        @NotBlank
         private String password;
-        @NotBlank(message = "nickname 입력하세요.")
+        @NotBlank
         private String nickname;
     }
 

@@ -19,6 +19,8 @@ public class ApiV1MemberController {
     private final MemberService memberService;
 
     //CRUD
+
+    // 요청 양식
     @AllArgsConstructor
     @Getter
     public static class MemberJoinReqBody{
@@ -30,14 +32,35 @@ public class ApiV1MemberController {
         private String nickname;
     }
 
+    // 응답 양식
+    @AllArgsConstructor
+    @Getter
+    public static class MemberJoinRespBody{
+        Member item;    // 단수로 표현.
+
+    }
+
+    // End_point & Action method
     // POST /api/v1/members/join
     @PostMapping("")   // "/join" 생략 가능하다. why? POST 때문에.
-    public RsData<Member> join(
+    public RsData<MemberJoinRespBody> join(
 //            String username, String password, String nickname
             @RequestBody @Valid MemberJoinReqBody requestBody
     ) {
 
-        return memberService.join(requestBody.username, requestBody.password, requestBody.nickname);
+        //  리턴값이 <MemberJoinRespBody> 일때 v1.
+//        RsData<Member> joinRs = memberService.join(requestBody.username, requestBody.password, requestBody.nickname);
+//        Member member = joinRs.getData();
+//
+//        return RsData.of(new MemberJoinRespBody(member));
+
+        RsData<Member> joinRs = memberService.join(requestBody.username, requestBody.password, requestBody.nickname);
+
+//        return joinRs; // (리턴값이 Member 일때)
+
+        return joinRs.newDataOf(
+                new MemberJoinRespBody(joinRs.getData())
+        );
 
     }
 

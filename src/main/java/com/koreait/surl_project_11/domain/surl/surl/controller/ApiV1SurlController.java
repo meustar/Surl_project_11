@@ -1,6 +1,7 @@
 package com.koreait.surl_project_11.domain.surl.surl.controller;
 
 import com.koreait.surl_project_11.domain.member.member.entity.Member;
+import com.koreait.surl_project_11.domain.surl.surl.dto.SurlDto;
 import com.koreait.surl_project_11.domain.surl.surl.entity.Surl;
 import com.koreait.surl_project_11.domain.surl.surl.service.SurlService;
 import com.koreait.surl_project_11.global.Rq.Rq;
@@ -34,7 +35,7 @@ public class ApiV1SurlController {
     @AllArgsConstructor
     @Getter
     public static class SurlAddRespBody {
-        private Surl item;
+        private SurlDto item;
     }
 
     @PostMapping("")
@@ -47,13 +48,15 @@ public class ApiV1SurlController {
         RsData<Surl> addRs =  surlService.add(member, reqBody.body, reqBody.url);
 
         return addRs.newDataOf(
-                new SurlAddRespBody(addRs.getData())
+                new SurlAddRespBody(
+                        new SurlDto(addRs.getData())
+                )
         );
     }
     @AllArgsConstructor
     @Getter
     public static class SurlGetRespBody {
-        private Surl item;
+        private SurlDto item;
     }
 
     // /api/v1/surls/{id}
@@ -66,7 +69,9 @@ public class ApiV1SurlController {
         Surl surl = surlService.findById(id).orElseThrow(GlobalException.E404::new);
 
         return RsData.of(
-                new SurlGetRespBody(surl)
+                new SurlGetRespBody(
+                        new SurlDto(surl)
+                )
         );
     }
 }

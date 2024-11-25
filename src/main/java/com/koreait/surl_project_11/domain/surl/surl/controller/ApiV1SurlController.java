@@ -74,10 +74,12 @@ public class ApiV1SurlController {
     // /api/v1/surls?id=1
     @GetMapping("/{id}")
     public RsData<SurlGetRespBody> get(
-            @PathVariable long id,
-            String actorUsername
+            @PathVariable long id
     ) {
         Surl surl = surlService.findById(id).orElseThrow(GlobalException.E404::new);
+
+        rq.getMember(); // member 로딩
+        rq.getMember(); // 빠르게 리턴 했으면 좋겠어.
 
         authService.checkCanGetSurl(rq.getMember(), surl);
 

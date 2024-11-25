@@ -74,7 +74,8 @@ public class ApiV1SurlController {
     // /api/v1/surls?id=1
     @GetMapping("/{id}")
     public RsData<SurlGetRespBody> get(
-            @PathVariable long id
+            @PathVariable long id,
+            String actorUsername
     ) {
         Surl surl = surlService.findById(id).orElseThrow(GlobalException.E404::new);
 
@@ -94,12 +95,7 @@ public class ApiV1SurlController {
         private List<SurlDto> items;
     }
     @GetMapping("")
-    public RsData<SurlGetItemsRespBody> getItems(
-            String actorUsername
-    ) {
-        Member logindMember = memberService.findByUsername(actorUsername).orElseThrow(GlobalException.E404::new);
-
-        rq.setMember(logindMember);
+    public RsData<SurlGetItemsRespBody> getItems() {
 
         Member member = rq.getMember();
 

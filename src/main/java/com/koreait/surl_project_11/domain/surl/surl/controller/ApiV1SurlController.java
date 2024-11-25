@@ -74,6 +74,12 @@ public class ApiV1SurlController {
     ) {
         Surl surl = surlService.findById(id).orElseThrow(GlobalException.E404::new);
 
+        Member member = rq.getMember();
+
+        if(!surl.getAuthor().equals(member)) {
+            throw new GlobalException("403-1", "권한이 없습니다.");
+        }
+
         return RsData.of(
                 new SurlGetRespBody(
                         new SurlDto(surl)
@@ -109,6 +115,12 @@ public class ApiV1SurlController {
     ) {
         Surl surl = surlService.findById(id).orElseThrow(GlobalException.E404::new);
 
+        Member member = rq.getMember();
+
+        if(!surl.getAuthor().equals(member)) {
+            throw new GlobalException("403-1", "권한이 없습니다.");
+        }
+
         surlService.delete(surl);
 
         return RsData.OK;
@@ -135,6 +147,14 @@ public class ApiV1SurlController {
     ) {
         Surl surl = surlService.findById(id).orElseThrow(GlobalException.E404::new);
         RsData<Surl> modifyRs = surlService.modify(surl, reqBody.body, reqBody.url);
+
+        Member member = rq.getMember();
+
+        if(!surl.getAuthor().equals(member)) {  // 객체 비교를 위해 equals를 사용해야 한다.
+//        if(surl.getAuthor().getId() != member.getId()) {
+            throw new GlobalException("403-1", "권한이 없습니다.");
+        }
+
         return modifyRs.newDataOf(
                 new SurlModifyRespBody(
                         new SurlDto(modifyRs.getData())

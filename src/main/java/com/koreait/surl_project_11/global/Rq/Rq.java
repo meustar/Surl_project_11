@@ -24,20 +24,12 @@ public class Rq {
 
     private Member member;
 
-//    @Getter
-//    @Setter
-//    private Member member;
-
     public Member getMember() {
         if(member != null) return member;   // 캐시 데이터 방식. == 메모리 캐싱
 
         // cookie
         String actorUsername = getCookieValue("actorUsername", null);
         String actorPassword = getCookieValue("actorPassword", null);
-
-        // 1. Url parameter에서 받아오는 방법.
-//        String actorUsername = req.getParameter("actorUsername"); // HttpServletRequest req => @RequestScope  .. Rq는 @RequestScope의 Bean이다.
-//        String actorPassword = req.getParameter("actorPassword");
 
         // 4.
         if (actorUsername == null || actorPassword == null) {
@@ -50,20 +42,10 @@ public class Rq {
             }
         }
 
-        // 3. 파라미터와 해더를 같이쓰는 방법.
-//        if(actorUsername == null) actorUsername = req.getHeader("actorUsername");
-//        if(actorPassword == null) actorPassword = req.getHeader("actorPassword");
-
-        // 1. header에서 받아오는 방법.
-//        actorUsername = req.getHeader("actorUsername");
-//        actorPassword = req.getHeader("actorPassword");
-
         if(Ut.str.isBlank(actorUsername)) throw new GlobalException("401-1", "인증정보(아이디) 입력해주세요.");
         if(Ut.str.isBlank(actorPassword)) throw new GlobalException("401-2", "인증정보(비밀번호) 입력해주세요.");
 
         Member loginedMember = memberService.findByUsername(actorUsername).orElseThrow(() -> new GlobalException("403-3", "해당 회원은 없습니다."));
-
-//        if(!loginedMember.getPassword().equals(actorPassword)) throw new GlobalException("403-4", "비밀번호가 틀렸습니다.");
 
         // 비밀번호 인증에 인코더 적용
         if (!memberService.matchPassword(actorPassword, loginedMember.getPassword()))
@@ -81,7 +63,7 @@ public class Rq {
         resp.setStatus(statusCode);
     }
 
-    private String getCookieValue(String cookieName, String defaultValue) {
+    public String getCookieValue(String cookieName, String defaultValue) {
         if (req.getCookies() == null) return defaultValue;
 
         return Arrays.stream(req.getCookies()) // 쿠키 배열을 스트림으로 변환

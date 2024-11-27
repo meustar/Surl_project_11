@@ -26,9 +26,14 @@ public class Rq {
     public Member getMember() {
         if (member != null) return member;   // 캐시 데이터 방식. == 메모리 캐싱
 
-        String name = SecurityContextHolder.getContext().getAuthentication().getName();
+//        String name = SecurityContextHolder.getContext().getAuthentication().getName();
 
-        member = memberService.findByUsername(name).get();
+//        member = memberService.findByUsername(name).get();
+
+        // username 대신 id 활용.
+        long id = Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getName());
+
+        member = memberService.findById(id).get();
 
         return member;
 

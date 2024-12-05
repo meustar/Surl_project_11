@@ -1,9 +1,12 @@
 package com.koreait.surl_project_11.domain.member.member.controller;
 
+import com.koreait.surl_project_11.domain.auth.auth.service.AuthService;
+import com.koreait.surl_project_11.domain.auth.auth.service.AuthTokenService;
 import com.koreait.surl_project_11.domain.member.member.dto.MemberDto;
 import com.koreait.surl_project_11.domain.member.member.entity.Member;
 import com.koreait.surl_project_11.domain.member.member.service.MemberService;
 import com.koreait.surl_project_11.global.Rq.Rq;
+import com.koreait.surl_project_11.global.app.AppConfig;
 import com.koreait.surl_project_11.global.exceptions.GlobalException;
 import com.koreait.surl_project_11.global.rsData.RsData;
 import com.koreait.surl_project_11.standard.dto.Empty;
@@ -25,6 +28,8 @@ public class ApiV1MemberController {
 
     private final MemberService memberService;
     private final Rq rq;
+    private final AuthService authService;
+    private final AuthTokenService authTokenService;
 
     @AllArgsConstructor
     @Getter
@@ -85,8 +90,10 @@ public class ApiV1MemberController {
         if (!memberService.matchPassword(requestBody.password, member.getPassword())) {
             throw new GlobalException("401-2", "비번 틀림");
         }
-//        rq.setCookie("actorUsername", member.getUsername());
-//        rq.setCookie("actorPassword", member.getPassword());
+
+        String accessToken = authTokenService.genToken(member, AppConfig.getAccessTokenExpirationSec());
+        rq.setCookie("accessToken", accessToken);
+
         rq.setCookie("apiKey", member.getApiKey());
 
         return RsData.of(

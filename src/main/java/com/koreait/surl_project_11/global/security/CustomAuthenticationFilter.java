@@ -1,8 +1,10 @@
 package com.koreait.surl_project_11.global.security;
 
 import com.koreait.surl_project_11.domain.auth.auth.service.AuthTokenService;
+import com.koreait.surl_project_11.domain.member.member.entity.Member;
 import com.koreait.surl_project_11.domain.member.member.service.MemberService;
 import com.koreait.surl_project_11.global.Rq.Rq;
+import com.koreait.surl_project_11.global.app.AppConfig;
 import com.koreait.surl_project_11.standard.util.Ut;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
@@ -35,28 +37,44 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
 
 //        String apiKey = rq.getCookieValue("apiKey", null);
         String accessToken = rq.getCookieValue("accessToken", null);
+        String refreshToken = rq.getCookieValue("refreshToken", null);
 
-        if (accessToken   == null) {
+        if (accessToken   == null || refreshToken == null) {
             String authorization = req.getHeader("Authorization");
 
             if (authorization != null) {
-                accessToken  = authorization.substring("bearer ".length());
+//                accessToken  = authorization.substring("bearer ".length());
+                String[] authorizationBits = authorization.substring("bearer ".length()).split(" ", 2);
+                if (authorizationBits.length == 2) {
+                    accessToken = authorizationBits[0];
+                    refreshToken = authorizationBits[1];
+                }
             }
         }
 
-        if (Ut.str.isBlank(accessToken )) {
+        if (Ut.str.isBlank(accessToken) || Ut.str.isBlank(refreshToken)) {
             filterChain.doFilter(req, resp);
             return;
         }
 
         if (!authTokenService.validateToken(accessToken)) {
-            filterChain.doFilter(req, resp);
-            return;
+//            filterChain.doFilter(req, resp);
+//            return;
+            Member member = memberService.findByRefreshToken(refreshToken).orElse(null);
+            if (member == null) {
+                filterChain.doFilter(req, resp);
+                return;
+            }
+            String newAccessToken = authTokenService.genToken(member, AppConfig.getAccessTokenExpirationSec());
+            rq.setCookie("accessToken", newAccessToken);
+            log.debug("accessToken renewed: {}", newAccessToken);
+            accessToken = newAccessToken;
+
         }
 
         Map<String, Object> accessTokenData = authTokenService.getDataFrom(accessToken);
         long id = (int) accessTokenData.get("id");
-        User user = new User(id+ "", "", List.of());
+        User user = new User(id + "", "", List.of());
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
 

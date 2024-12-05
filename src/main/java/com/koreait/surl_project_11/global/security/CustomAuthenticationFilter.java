@@ -57,17 +57,21 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
+        // 엑세스 토큰 만료시 refreshToken으로 새로 교체 - 유효시간 마다
         if (!authTokenService.validateToken(accessToken)) {
 //            filterChain.doFilter(req, resp);
 //            return;
             Member member = memberService.findByRefreshToken(refreshToken).orElse(null);
+            
             if (member == null) {
                 filterChain.doFilter(req, resp);
                 return;
             }
+            // 만료되면 자동적으로 갱신.
             String newAccessToken = authTokenService.genToken(member, AppConfig.getAccessTokenExpirationSec());
             rq.setCookie("accessToken", newAccessToken);
             log.debug("accessToken renewed: {}", newAccessToken);
+
             accessToken = newAccessToken;
 
         }

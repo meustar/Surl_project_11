@@ -7,11 +7,13 @@ import com.koreait.surl_project_11.standard.dto.Empty;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -45,7 +47,7 @@ public class GlobalExceptionHandler {
 
     // Global 이지만. 한정적인 상황
     @ExceptionHandler(GlobalException.class)
-//    @ResponseStatus(HttpStatus.BAD_REQUEST)   // 400으로 고정.
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
     public ResponseEntity<RsData<Empty>> handleException(GlobalException ex) {
 
@@ -53,6 +55,7 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity
                 .status(rsData.getStatusCode())
+                .contentType(MediaType.APPLICATION_JSON)
                 .body(rsData);
     }
 

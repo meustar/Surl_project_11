@@ -29,6 +29,8 @@ spring:
         highlight_sql: true
         use_sql_comments: true
     open-in-view: false
+springdoc:
+  default-produces-media-type: application/json
 logging:
   level:
     com.koreait.surl_project_11: DEBUG

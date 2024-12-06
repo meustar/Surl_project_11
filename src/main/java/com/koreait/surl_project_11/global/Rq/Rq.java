@@ -2,6 +2,7 @@ package com.koreait.surl_project_11.global.Rq;
 
 import com.koreait.surl_project_11.domain.member.member.entity.Member;
 import com.koreait.surl_project_11.domain.member.member.service.MemberService;
+import com.koreait.surl_project_11.global.app.AppConfig;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -27,17 +28,12 @@ public class Rq {
     public Member getMember() {
         if (member != null) return member;   // 캐시 데이터 방식. == 메모리 캐싱
 
-//        String name = SecurityContextHolder.getContext().getAuthentication().getName();
-
-//        member = memberService.findByUsername(name).get();
-
         // username 대신 id 활용.
         long id = Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getName());
 
         member = memberService.findById(id).get();
 
         return member;
-
     }
 
     public String getCurrentUrlPath() {
@@ -82,6 +78,11 @@ public class Rq {
         resp.addHeader("Set-Cookie", cookie.toString());
     }
     private String getSiteCookieDomain() {
-        return "localhost";
+
+        String cookieDomain = AppConfig.getSiteCookieDomain();
+
+        if(cookieDomain.equals("localhost")) return cookieDomain;
+
+        return "." + cookieDomain;
     }
 }

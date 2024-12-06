@@ -14,7 +14,7 @@ public class CustomWebMvcConfig implements WebMvcConfigurer {
 
         registry.addMapping("/api/**")
                 .allowedOrigins(
-                        AppConfig.getSiteFrontUrl()
+                        AppConfig.getSiteFrontUrl() // http://localhost:5173 or https://www.surl.kgbmeu.site
                 )
                 .allowedMethods("*")
                 .allowedHeaders("*")

@@ -19,7 +19,7 @@
 			return;
 		}
 
-		const rs = await fetch('http://localhost:8070/api/v1/members/login', {
+		const rs = await fetch('${import.meta.env.VITE_CORE_API_BASE_URL}/api/v1/members/login', {
 
 			method: 'POST',
 			credentials: 'include', //: 타 도메인간의 쿠키 통신이 가능하도록

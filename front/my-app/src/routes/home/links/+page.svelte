@@ -3,5 +3,4 @@
   <li><a href="/about">설명</a></li>
   <li><a href="/home/links">링크</a></li>
 </ul>
-<h1>Main page</h1>
-
+<h1>home/links</h1>

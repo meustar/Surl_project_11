@@ -39,7 +39,7 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
         String accessToken = rq.getCookieValue("accessToken", null);
         String refreshToken = rq.getCookieValue("refreshToken", null);
 
-        if (accessToken   == null || refreshToken == null) {
+        if (accessToken == null || refreshToken == null) {
             String authorization = req.getHeader("Authorization");
 
             if (authorization != null) {
@@ -62,7 +62,7 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
 //            filterChain.doFilter(req, resp);
 //            return;
             Member member = memberService.findByRefreshToken(refreshToken).orElse(null);
-            
+
             if (member == null) {
                 filterChain.doFilter(req, resp);
                 return;

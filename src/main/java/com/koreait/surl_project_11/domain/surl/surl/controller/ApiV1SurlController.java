@@ -35,20 +35,6 @@ public class ApiV1SurlController {
     private final Rq rq;
     private final MemberService memberService;
 
-    @AllArgsConstructor
-    @Getter
-    public static class SurlAddReqBody {
-        @NotBlank
-        private String body;
-        @NotBlank
-        private String url;
-    }
-    @AllArgsConstructor
-    @Getter
-    public static class SurlAddRespBody {
-        private SurlDto item;
-    }
-
     @PostMapping("")
     @ResponseBody
     @Transactional
@@ -58,18 +44,13 @@ public class ApiV1SurlController {
     ) {
         Member member = rq.getMember(); // 현재 브라우저로 로그인 한 회원 정보
 
-        RsData<Surl> addRs =  surlService.add(member, reqBody.body, reqBody.url);
+        RsData<Surl> addRs = surlService.add(member, reqBody.body, reqBody.url);
 
         return addRs.newDataOf(
                 new SurlAddRespBody(
                         new SurlDto(addRs.getData())
                 )
         );
-    }
-    @AllArgsConstructor
-    @Getter
-    public static class SurlGetRespBody {
-        private SurlDto item;
     }
 
     // /api/v1/surls/{id}
@@ -94,12 +75,6 @@ public class ApiV1SurlController {
         );
     }
 
-
-    @AllArgsConstructor
-    @Getter
-    public static class SurlGetItemsRespBody {
-        private List<SurlDto> items;
-    }
     @GetMapping("")
     @Operation(summary = "다건조회")
     public RsData<SurlGetItemsRespBody> getItems() {
@@ -133,19 +108,6 @@ public class ApiV1SurlController {
         return RsData.OK;
     }
 
-    @AllArgsConstructor
-    @Getter
-    public static class SurlModifyReqBody {
-        @NotBlank
-        private String body;
-        @NotBlank
-        private String url;
-    }
-    @AllArgsConstructor
-    @Getter
-    public static class SurlModifyRespBody {
-        private SurlDto item;
-    }
     @PutMapping("/{id}")
     @Transactional
     @Operation(summary = "수정")
@@ -164,6 +126,48 @@ public class ApiV1SurlController {
                         new SurlDto(modifyRs.getData())
                 )
         );
+    }
+
+    @AllArgsConstructor
+    @Getter
+    public static class SurlAddReqBody {
+        @NotBlank
+        private String body;
+        @NotBlank
+        private String url;
+    }
+
+    @AllArgsConstructor
+    @Getter
+    public static class SurlAddRespBody {
+        private SurlDto item;
+    }
+
+    @AllArgsConstructor
+    @Getter
+    public static class SurlGetRespBody {
+        private SurlDto item;
+    }
+
+    @AllArgsConstructor
+    @Getter
+    public static class SurlGetItemsRespBody {
+        private List<SurlDto> items;
+    }
+
+    @AllArgsConstructor
+    @Getter
+    public static class SurlModifyReqBody {
+        @NotBlank
+        private String body;
+        @NotBlank
+        private String url;
+    }
+
+    @AllArgsConstructor
+    @Getter
+    public static class SurlModifyRespBody {
+        private SurlDto item;
     }
 
 }

@@ -26,6 +26,7 @@ public class SpringDocConfig {
                 .pathsToMatch("/api/v1/**")
                 .build();
     }
+
     @Bean
     public GroupedOpenApi groupController() {   // API v1에 관련없는 API에 대한 문서 생성
         return GroupedOpenApi.builder()

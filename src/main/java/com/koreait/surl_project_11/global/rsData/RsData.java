@@ -1,4 +1,5 @@
 package com.koreait.surl_project_11.global.rsData;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.koreait.surl_project_11.standard.dto.Empty;
 import lombok.AllArgsConstructor;

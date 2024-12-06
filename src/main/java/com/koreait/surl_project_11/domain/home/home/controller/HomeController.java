@@ -18,7 +18,7 @@ public class HomeController {
     @GetMapping("/")
     @ResponseBody
     @Operation(summary = "API 메인화면")
-    public String ShowMain(){
+    public String ShowMain() {
         return "Meustar~  " + customSiteName + "~!! Wow";
     }
 }

@@ -35,25 +35,6 @@ public class ApiV1MemberController {
     private final AuthService authService;
     private final AuthTokenService authTokenService;
 
-    @AllArgsConstructor
-    @Getter
-    public static class MemberJoinReqBody{
-        @NotBlank   // (공백금지)
-        private String username;
-        @NotBlank
-        private String password;
-        @NotBlank
-        private String nickname;
-    }
-
-    // 응답 양식
-    @AllArgsConstructor
-    @Getter
-    public static class MemberJoinRespBody{
-        MemberDto item;
-
-    }
-
     // POST /api/v1/members
     @PostMapping("")
     @Transactional
@@ -72,19 +53,6 @@ public class ApiV1MemberController {
         );
     }
 
-    @AllArgsConstructor
-    @Getter
-    public static class MemberLoginReqBody {
-        @NotBlank
-        private String username;
-        @NotBlank
-        private String password;
-    }
-    @AllArgsConstructor
-    @Getter
-    public static class MemberLoginRespBody {
-        MemberDto item;
-    }
     @PostMapping("/login")
     @Transactional
     @Operation(summary = "로그인", description = "성공하면 accessToken, refreshToken 쿠키가 생성됨")
@@ -117,5 +85,39 @@ public class ApiV1MemberController {
         rq.removeCookie("actorPassword");
 
         return RsData.OK;
+    }
+
+    @AllArgsConstructor
+    @Getter
+    public static class MemberJoinReqBody {
+        @NotBlank   // (공백금지)
+        private String username;
+        @NotBlank
+        private String password;
+        @NotBlank
+        private String nickname;
+    }
+
+    // 응답 양식
+    @AllArgsConstructor
+    @Getter
+    public static class MemberJoinRespBody {
+        MemberDto item;
+
+    }
+
+    @AllArgsConstructor
+    @Getter
+    public static class MemberLoginReqBody {
+        @NotBlank
+        private String username;
+        @NotBlank
+        private String password;
+    }
+
+    @AllArgsConstructor
+    @Getter
+    public static class MemberLoginRespBody {
+        MemberDto item;
     }
 }

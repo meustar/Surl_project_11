@@ -22,17 +22,16 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class NotProd {
 
+    private final ArticleService articleService;
+    // this를 통한 객체 내부에서의 메서드 호출은 @Transactional을 작동시키지 않는다.
+    // 외부객체에 의한 메서드 호출은 @Transactional이 작동한다.
+    // @Lazy, @Autowired 조합은 this의 외부 호출 모드 버전인 self를 얻을 수 있다.
+    // self를 통한 메서드 호출은 @Transactional을 작동 시킬 수 있다.
+    private final MemberService memberService;
+    private final SurlService surlService;
     @Lazy
     @Autowired
     private NotProd self;   // Bean으로 등록됨.
-                            // this를 통한 객체 내부에서의 메서드 호출은 @Transactional을 작동시키지 않는다.
-                            // 외부객체에 의한 메서드 호출은 @Transactional이 작동한다.
-                            // @Lazy, @Autowired 조합은 this의 외부 호출 모드 버전인 self를 얻을 수 있다.
-                            // self를 통한 메서드 호출은 @Transactional을 작동 시킬 수 있다.
-
-    private final ArticleService articleService;
-    private final MemberService memberService;
-    private final SurlService surlService;
 
     @Bean   // 개발자가 new 하지 않아도스프링부트가 직접 관리하는 객체
     @Order(4)
@@ -46,16 +45,16 @@ public class NotProd {
     @Transactional
     public void work1() {
 
-        if (articleService.count() > 0 ) return;
+        if (articleService.count() > 0) return;
 
         Member memberUser1 = memberService.findByUsername("user1").get();
         Member memberUser2 = memberService.findByUsername("user2").get();
 
-        Article article1 = articleService.write(memberUser1,"제목 1", "내용 1").getData();
-        Article article2 = articleService.write(memberUser1,"제목 2", "내용 2").getData();
+        Article article1 = articleService.write(memberUser1, "제목 1", "내용 1").getData();
+        Article article2 = articleService.write(memberUser1, "제목 2", "내용 2").getData();
 
-        Article article3 = articleService.write(memberUser2,"제목 3", "내용 3").getData();
-        Article article4 = articleService.write(memberUser2,"제목 4", "내용 4").getData();
+        Article article3 = articleService.write(memberUser2, "제목 3", "내용 3").getData();
+        Article article4 = articleService.write(memberUser2, "제목 4", "내용 4").getData();
 
         Surl surl1 = surlService.add(memberUser1, "네이버", "https://www.naver.com").getData();
         Surl surl2 = surlService.add(memberUser1, "다음", "https://www.daum.net").getData();

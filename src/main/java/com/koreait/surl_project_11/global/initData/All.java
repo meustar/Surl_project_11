@@ -2,6 +2,7 @@ package com.koreait.surl_project_11.global.initData;
 
 import com.koreait.surl_project_11.domain.member.member.entity.Member;
 import com.koreait.surl_project_11.domain.member.member.service.MemberService;
+import com.koreait.surl_project_11.global.app.AppConfig;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

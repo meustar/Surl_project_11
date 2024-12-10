@@ -11,6 +11,7 @@ import com.koreait.surl_project_11.global.exceptions.GlobalException;
 import com.koreait.surl_project_11.global.rsData.RsData;
 import com.koreait.surl_project_11.standard.dto.Empty;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -28,6 +29,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 @Transactional(readOnly = true)
+@SecurityRequirement(name = "bearerAuth")
 public class ApiV1SurlController {
 
     private final SurlService surlService;

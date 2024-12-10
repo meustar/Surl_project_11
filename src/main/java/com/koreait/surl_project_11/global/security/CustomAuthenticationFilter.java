@@ -28,28 +28,36 @@ import java.util.Map;
 public class CustomAuthenticationFilter extends OncePerRequestFilter {
 
     private final MemberService memberService;
-    private final Rq rq;
     private final AuthTokenService authTokenService;
+    private final Rq rq;
 
     @Override
     @SneakyThrows
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse resp, FilterChain filterChain) {
 
-//        String apiKey = rq.getCookieValue("apiKey", null);
-        String accessToken = rq.getCookieValue("accessToken", null);
-        String refreshToken = rq.getCookieValue("refreshToken", null);
+        String accessToken = null;
+        String refreshToken = null;
 
-        if (accessToken == null || refreshToken == null) {
-            String authorization = req.getHeader("Authorization");
+        boolean cookieBased = true;
 
-            if (authorization != null) {
-//                accessToken  = authorization.substring("bearer ".length());
-                String[] authorizationBits = authorization.substring("bearer ".length()).split(" ", 2);
-                if (authorizationBits.length == 2) {
-                    accessToken = authorizationBits[0];
-                    refreshToken = authorizationBits[1];
-                }
+        String authorization = req.getHeader("Authorization");
+
+        if (authorization != null) {
+
+            String[] authorizationBits = authorization.substring("Bearer ".length()).split(" ", 2);
+
+            if (authorizationBits.length == 2) {
+
+                refreshToken = authorizationBits[0];
+                accessToken = authorizationBits[1];
+                cookieBased = false;
             }
+        }
+
+        if (Ut.str.isBlank(accessToken) || Ut.str.isBlank(refreshToken)) {
+            accessToken = rq.getCookieValue("accessToken", null);
+            refreshToken = rq.getCookieValue("refreshToken", null);
+            cookieBased = true;
         }
 
         if (Ut.str.isBlank(accessToken) || Ut.str.isBlank(refreshToken)) {
@@ -69,20 +77,26 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
             }
             // 만료되면 자동적으로 갱신.
             String newAccessToken = authTokenService.genToken(member, AppConfig.getAccessTokenExpirationSec());
-            rq.setCookie("accessToken", newAccessToken);
-            log.debug("accessToken renewed: {}", newAccessToken);
+
+            if (cookieBased)
+                rq.setCookie("accessToken", newAccessToken);
+            else
+                resp.setHeader("Authorization", "Bearer " + refreshToken + " " + newAccessToken);
 
             accessToken = newAccessToken;
 
         }
 
         Map<String, Object> accessTokenData = authTokenService.getDataFrom(accessToken);
+
         long id = (int) accessTokenData.get("id");
+
         User user = new User(id + "", "", List.of());
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
+
         filterChain.doFilter(req, resp);
     }
 }

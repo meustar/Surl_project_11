@@ -14,21 +14,21 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class AppConfig {
 
 
-    @Autowired
-    public void setObjectMapper(ObjectMapper objectMapper) {
-        this.objectMapper = objectMapper;
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+    @Getter
+    public static ObjectMapper objectMapper;
 
     private static Environment environment;
-    @Autowired
-    public void setEnvironment(Environment environment) {
-        this.environment = environment;
-    }
+    @Getter
+    private static String jwtSecretKey;
+    @Getter
+    private static long accessTokenExpirationSec;
+    @Getter
+    private static String siteFrontUrl;
+    @Getter
+    private static String siteBackUrl;
+    @Getter
+    private static String siteCookieDomain;
+
     public static boolean isProd() {
         return environment.matchesProfiles("prod");
     }
@@ -41,40 +41,42 @@ public class AppConfig {
     public static boolean isNotProd() {
         return !isProd();
     }
-    @Getter
-    public static ObjectMapper objectMapper;
-    @Getter
-    private static String jwtSecretKey;
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Autowired
+    public void setEnvironment(Environment environment) {
+        this.environment = environment;
+    }
+    @Autowired
+    public void setObjectMapper(ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
+    }
 
     @Value("${custom.secret.jwt.secretKey}")
     public void setJwtSecretKey(String jwtSecretKey) {
         this.jwtSecretKey = jwtSecretKey;
     }
 
-    @Getter
-    private static long accessTokenExpirationSec;
 
     @Value("${custom.accessToken.expirationSec}")
     public void setJwtSecretKey(long accessTokenExpirationSec) {
         this.accessTokenExpirationSec = accessTokenExpirationSec;
     }
 
-    @Getter
-    private static String siteFrontUrl;
     @Value("${custom.site.frontUrl}")
     public void setSiteFrontUrl(String siteFrontUrl) {
         this.siteFrontUrl = siteFrontUrl;
     }
 
-    @Getter
-    private static String siteBackUrl;
     @Value("${custom.site.backUrl}")
     public void setSiteBackUrl(String siteBackUrl) {
         this.siteBackUrl = siteBackUrl;
     }
 
-    @Getter
-    private static String siteCookieDomain;
     @Value("${custom.site.cookieDomain}")
     public void setSiteCookieDomain(String siteCookieDomain) {
         this.siteCookieDomain = siteCookieDomain;

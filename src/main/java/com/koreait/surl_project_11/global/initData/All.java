@@ -40,9 +40,17 @@ public class All {
         if (memberService.count() > 0) return;
 
         Member memberSystem = memberService.join("system", "1234", "시스템").getData();
+        if (AppConfig.isNotProd()) memberSystem.setRefreshToken(memberSystem.getUsername());
+
         Member memberAdmin = memberService.join("admin", "1234", "관리자").getData();
+        if (AppConfig.isNotProd()) memberAdmin.setRefreshToken(memberAdmin.getUsername());
+
         Member member1 = memberService.join("user1", "1234", "회원1").getData();
+        if (AppConfig.isNotProd()) member1.setRefreshToken(member1.getUsername());
+
         Member member2 = memberService.join("user2", "1234", "회원2").getData();
+        if (AppConfig.isNotProd()) member2.setRefreshToken(member2.getUsername());
+
 
     }
 }

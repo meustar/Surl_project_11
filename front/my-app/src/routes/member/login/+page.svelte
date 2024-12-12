@@ -1,17 +1,6 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
 
-	import createClient from 'openapi-fetch';
-
-	import type { paths } from '$lib/backend/apiV1/schema';
-
-	type Client = ReturnType<typeof createClient<paths>>;
-
-	const client: Client = createClient<paths>({
-
-		baseUrl: import.meta.env.VITE_CORE_API_BASE_URL,
-		credentials: 'include'
-	});
+	import rq from '$lib/rq/rq.svelte';
 
 
 	async function submitLoginForm(this: HTMLFormElement) {
@@ -33,7 +22,7 @@
 			return;
 		}
 
-		const { data, error } = await client.POST('/api/v1/members/login', {
+		const { data, error } = await rq.getClient().POST('/api/v1/members/login', {
 			body: {
 				username: form.username.value,
 				password: form.password.value
@@ -41,7 +30,7 @@
 		});
 		if (data) {
 			data.msg && alert(data.msg);
-			goto('/');
+			rq.goto('/');
 		} else if (error) {
 			error.msg && alert(error.msg);
 		}

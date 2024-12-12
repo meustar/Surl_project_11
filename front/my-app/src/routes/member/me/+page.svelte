@@ -1,40 +1,30 @@
 <script lang="ts">
 
-	class GlobalError extends Error {
+    import createClient from 'openapi-fetch';
+	import type { paths, components } from '$lib/backend/apiV1/schema';
 
-		constructor(public rs: any) {
-			super(rs.msg);
-		}
-	}
+	type Client = ReturnType<typeof createClient<paths>>;
 
-	type Member = {
-		id: number;
-		createDate: string;
-		modifyDate: string;
-		username: string;
-		nickname: string;
-	};
+	const client: Client = createClient<paths>({
+		baseUrl: import.meta.env.VITE_CORE_API_BASE_URL,
+		credentials: 'include'
 
-	let member: Member | null = $state(null);
+	});
+
+	let member: components['schemas']['MemberDto'] | null = $state(null);
 	let errorMessage: string | null = $state(null);
 
 	async function getMe() {
-		try {
 
-			const response = await fetch(`${import.meta.env.VITE_CORE_API_BASE_URL}/api/v1/members/me`, {
-				credentials: 'include'
-			});
+		const { data, error } = await client.GET('/api/v1/members/me');
+		
+        if (data) {
 
-			const rs = await response.json();
-			if (!response.ok) {
-				throw new GlobalError(rs);
-			}
+			member = data.data.item!;
+            
+		} else if (error) {
 
-			member = rs.data.item;
-
-		} catch (error: any) {
-			errorMessage = error.rs.msg;
-			console.error(error.rs);
+			errorMessage = error.msg;
 		}
 	}
 
@@ -62,7 +52,7 @@
 			<span>{member.modifyDate}</span>
 		</div>
 	</div>
-    
+
 {:else if errorMessage !== null}
 	<div>에러 발생: {errorMessage}</div>
 {/if}

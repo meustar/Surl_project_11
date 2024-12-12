@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 
 	import createClient from 'openapi-fetch';
 
@@ -40,7 +41,7 @@
 		});
 		if (data) {
 			data.msg && alert(data.msg);
-			location.href = '/';
+			goto('/');
 		} else if (error) {
 			error.msg && alert(error.msg);
 		}

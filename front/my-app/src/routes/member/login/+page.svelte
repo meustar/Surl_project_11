@@ -30,7 +30,9 @@
 		});
 		if (data) {
 			data.msg && alert(data.msg);
+			rq.setLogined(data.data.item);
 			rq.goto('/');
+			
 		} else if (error) {
 			error.msg && alert(error.msg);
 		}

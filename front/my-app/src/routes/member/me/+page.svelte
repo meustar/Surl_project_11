@@ -3,6 +3,9 @@
     import rq from '$lib/rq/rq.svelte';
 
 </script>
+
+<h1>내 정보</h1>
+
 {#if rq.isLogin()}
 	<div>
 		<div>

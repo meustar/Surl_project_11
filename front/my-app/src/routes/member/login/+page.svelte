@@ -32,12 +32,14 @@
 			data.msg && alert(data.msg);
 			rq.setLogined(data.data.item);
 			rq.goto('/');
-			
+
 		} else if (error) {
 			error.msg && alert(error.msg);
 		}
 	}
 </script>
+
+<h1>로그인</h1>
 
 <form on:submit|preventDefault={submitLoginForm}>
 	<div>

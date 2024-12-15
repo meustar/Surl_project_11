@@ -21,6 +21,8 @@ import rq from '$lib/rq/rq.svelte';
 		{#if rq.isLogin()}
 			<button type="button" on:click|preventDefault={logout}>로그아웃</button>
 			<a href="/member/me">{rq.member.nickname}님의 정보</a>
+			<a href="/surl/list">SURL 목록</a>
+			<a href="/surl/add">SURL 등록</a>
 		{/if}
 
 		{#if rq.isLogout()}

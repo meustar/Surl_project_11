@@ -1,7 +1,5 @@
 <script lang="ts">
-
-    import rq from '$lib/rq/rq.svelte';
-
+	import rq from '$lib/rq/rq.svelte';
 </script>
 
 <h1>내 정보</h1>

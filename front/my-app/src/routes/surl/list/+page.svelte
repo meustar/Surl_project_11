@@ -9,7 +9,7 @@
 		}
 	}
 
-  async function deleteSurl(surl: components['schemas']['SurlDto']) {
+	async function deleteSurl(surl: components['schemas']['SurlDto']) {
 		const { data, error } = await rq.getClient().DELETE(`/api/v1/surls/{id}`, {
 			params: {
 				path: {
@@ -28,18 +28,18 @@
 		getSurls();
 	});
 </script>
+
 <h1>SURL 목록</h1>
 <ul>
 	{#each surls as surl (surl.id)}
 		<li>
-      <a href="/surl/{surl.id}">{surl.id}</a> : {surl.url}
-			{surl.id} : {surl.url}
+			<a href="/surl/{surl.id}">{surl.id}</a> : {surl.url}
 			<br />
 			{surl.body}
 
-      <a href="/surl/{surl.id}/edit">수정</a>
+			<a href="/surl/{surl.id}/edit">수정</a>
 
-      <button
+			<button
 				type="button"
 				on:click|preventDefault={() => confirm('정말로 삭제하시겠습니까?') && deleteSurl(surl)}
 				>삭제</button

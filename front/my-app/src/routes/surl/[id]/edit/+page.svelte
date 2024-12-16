@@ -50,6 +50,7 @@
 		getSurl();
 	});
 </script>
+
 <h1>{$page.params.id}번 SURL 수정</h1>
 {#if surl}
 	<form onsubmit={submitModifyForm}>

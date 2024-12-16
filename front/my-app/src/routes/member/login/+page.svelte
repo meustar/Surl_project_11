@@ -1,21 +1,16 @@
 <script lang="ts">
-
 	import rq from '$lib/rq/rq.svelte';
 
-
 	async function submitLoginForm(this: HTMLFormElement) {
-
 		const form: HTMLFormElement = this;
-		form.username.value = form.username.value.trim();
 
+		form.username.value = form.username.value.trim();
 		if (form.username.value.length === 0) {
 			alert('username 입력해');
 			form.username.focus();
 			return;
 		}
-
 		form.password.value = form.password.value.trim();
-
 		if (form.password.value.length === 0) {
 			alert('password 입력해');
 			form.password.focus();
@@ -32,7 +27,6 @@
 			data.msg && alert(data.msg);
 			rq.setLogined(data.data.item);
 			rq.goto('/');
-
 		} else if (error) {
 			error.msg && alert(error.msg);
 		}

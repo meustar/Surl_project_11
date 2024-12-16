@@ -1,28 +1,22 @@
 import { goto } from '$app/navigation';
 import createClient from 'openapi-fetch';
-import type { paths, components } from '$lib/backend/apiV1/schema';
-
+import type { paths ,components } from '$lib/backend/apiV1/schema';
 type Client = ReturnType<typeof createClient<paths>>;
-
 const client: Client = createClient<paths>({
 	baseUrl: import.meta.env.VITE_CORE_API_BASE_URL,
 	credentials: 'include'
 });
-
 class Rq {
-	public member: components['schemas']['MemberDto'];
-
+    public member: components['schemas']['MemberDto'];
 	constructor() {
 		this.member = this.makeReactivityMember();
 	}
-
 	private makeReactivityMember() {
 		let id = $state(0);
 		let createDate = $state('');
 		let modifyDate = $state('');
 		let username = $state('');
 		let nickname = $state('');
-
 		return {
 			get id() {
 				return id;
@@ -78,7 +72,6 @@ class Rq {
 			this.setLogined(data.data.item);
 		}
 	}
-
 	public goto(url: string) {
 		goto(url);
 	}
@@ -91,7 +84,5 @@ class Rq {
 		return client;
 	}
 }
-
 const rq = new Rq();
-
 export default rq;

@@ -36,9 +36,7 @@ dependencies {
     runtimeOnly 'com.mysql:mysql-connector-j'
     runtimeOnly 'org.postgresql:postgresql'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-
-    // H2
-    implementation 'com.h2database:h2'
+    runtimeOnly 'com.h2database:h2'
 
     // API를 통한 스프링부트의 상태 모니터링. 컨테이너 교체시기 확인가능.
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
@@ -47,7 +45,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'org.springframework.session:spring-session-data-redis'
 
-    // jwt
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0'
+
     implementation 'io.jsonwebtoken:jjwt-api:0.12.3'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.3', 'io.jsonwebtoken:jjwt-jackson:0.12.3'
 
